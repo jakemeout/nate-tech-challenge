@@ -1,10 +1,9 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from config import main_config
 from selenium import webdriver
 from collections import defaultdict
-
 import datetime
 import re
 
@@ -12,6 +11,7 @@ app = Flask(__name__)
 app.config.from_object(main_config["development"])
 app.config["CORS_ORIGINS"] = ["http://localhost:3000", "*"]
 app.config["CORS_HEADERS"] = ["Content-Type"]
+app.config["JSON_SORT_KEYS"] = False
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 db.init_app(app)
@@ -34,9 +34,16 @@ def parse_search():
         pre_text = re.sub("[^A-Za-z0-9]+", " ", el.text)
         text = pre_text.strip().split()
         print("Split end time", datetime.datetime.now())
-        analysis = defaultdict(int)
+
+        non_sorted_analysis = defaultdict(int)
         for word in text:
-            analysis[word] += 1
+            word = word.lower()
+            non_sorted_analysis[word] += 1
+
+        analysis = dict(
+            sorted(non_sorted_analysis.items(), key=lambda x: x[1], reverse=True)
+        )
+
         driver.close()
 
         new_instance = ParsedText.ParsedText(
@@ -55,12 +62,14 @@ def parse_search():
         return jsonify({"success": "false"})
 
 
-@app.route("/api/history", methods=["GET"])
+@app.route("/api/historicalsearch", methods=["GET"])
 @cross_origin(headers=["Content-Type"])
 def get_history():
     if request.method == "GET":
         return jsonify(
-            history=[e.serialize for e in ParsedText.ParsedText.get_all_results()]
+            historicalsearch=[
+                e.serialize for e in ParsedText.ParsedText.get_all_results()
+            ]
         )
     else:
         return jsonify({"response": "weird method I think... Sorry!"})
