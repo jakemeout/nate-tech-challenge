@@ -38,7 +38,7 @@ const SubmitUrl = () => {
 
     return (
       <ResultsStyle>
-        <h1>Results</h1>
+        <h2>Results</h2>
         <h3>You searched {url}</h3>
         <h6>{text}</h6>
         <ResultAnalysis>{renderData()}</ResultAnalysis>
@@ -49,17 +49,25 @@ const SubmitUrl = () => {
   return (
     <>
       <SubmitUrlStyle>
-        <div>
-          Enter a URL:
+        <h2>Search A Website!</h2>
+        <div data-testid="submiturl-form">
           <form>
+            <label>Enter a URL: </label>
             <input
+              data-testid="form-input"
               type="text"
               name="input"
               value={value}
               placeholder={"https://google.com"}
               onChange={(e) => onType(e.target.value)}
             />
-            <button type="submit" value="Submit" onClick={handleSubmit}>
+
+            <button
+              data-testid="form-submit"
+              type="submit"
+              value="Submit"
+              onClick={handleSubmit}
+            >
               Submit
             </button>
           </form>
@@ -72,6 +80,8 @@ const SubmitUrl = () => {
 
 const SubmitUrlStyle = styled.div`
   display: flex;
+  align-items: center;
+  flex-direction: column;
   justify-content: center;
   font-family: Helvetica;
   margin-top: 5%;
@@ -86,8 +96,8 @@ const ResultsStyle = styled.div`
 `;
 const ResultAnalysis = styled.div`
   border: 1px solid grey;
-  height: 500px;
-  width: 600px;
+  height: 800px;
+  width: 800px;
   overflow: scroll;
   flex-direction: column;
   display: flex;

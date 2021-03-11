@@ -5,7 +5,7 @@ const Navigation = () => {
   return (
     <NavStyle>
       <h1>Parse-a-page</h1>
-      <div>
+      <div data-testid="navigation">
         <h5>
           Submit a webpage for word processing! When you submit a url, we will
           process the document and share the results below.

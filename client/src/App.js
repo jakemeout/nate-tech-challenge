@@ -1,14 +1,14 @@
-import History from "./components/History";
+import HistoricalResults from "./components/HistoricalResults";
 import SubmitUrl from "./components/SubmitUrl";
 import Navigation from "./components/Navigation";
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Navigation />
       <SubmitUrl />
-      <History />
-    </div>
+      <HistoricalResults />
+    </>
   );
 }
 
